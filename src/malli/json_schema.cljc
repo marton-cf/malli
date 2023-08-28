@@ -19,7 +19,7 @@
         (swap! definitions assoc ref ::recursion-stopper)
         (swap! definitions assoc ref (transform child options))))
     ;; '/' must be encoded as '~1' in JSON Schema - https://www.rfc-editor.org/rfc/rfc6901
-    {:$ref (apply str "#/definitions/" (str/replace ref #"/" "~1"))}))
+    {:$ref (apply str "#/components/schemas/" (str/replace ref #"/" "~1"))}))
 
 (defn -schema [schema {::keys [transform] :as options}]
   (if (m/-ref schema)
