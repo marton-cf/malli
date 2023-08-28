@@ -28,7 +28,7 @@
     (-ref schema options)
     (transform (m/deref schema) options)))
 
-(defn select [m] (select-keys m [:title :description :default]))
+(defn select [m] (select-keys m [:title :description :default :example :examples]))
 
 (defmulti accept (fn [name _schema _children _options] name) :default ::default)
 
