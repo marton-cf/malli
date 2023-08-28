@@ -13,7 +13,7 @@
       (let [child (m/deref schema)]
         (swap! definitions assoc x ::recursion-stopper)
         (swap! definitions assoc x (transform child options))))
-    {:$ref (apply str "#/definitions/"
+    {:$ref (apply str "#/components/schemas/"
                   (cond
                     ;; / must be encoded as ~1 in JSON Schema
                     ;; https://json-schema.org/draft/2019-09/relative-json-pointer.html
