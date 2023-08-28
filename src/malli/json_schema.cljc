@@ -113,7 +113,10 @@
                 properties' (update :properties merge properties')
                 required' (update :required (comp vec distinct into) required')))))
 
-(defmethod accept :multi [_ _ children _] {:oneOf (mapv last children)})
+(defmethod accept :multi [_ schema children _]
+  {:oneOf (mapv last children)
+   :discriminator {:propertyName (:dispatch (m/properties schema))
+                   :type "string"}})
 
 (defn- minmax-properties [m schema kmin kmax]
   (merge m (-> schema (m/properties) (select-keys [:min :max]) (set/rename-keys {:min kmin, :max kmax}))))
