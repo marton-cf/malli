@@ -10,9 +10,7 @@
 
 (defn -join-ref [prefix suffix]
   ;; kludge to make :foo.bar/quux and :foo/bar.quux not collide
-  (str prefix
-       (if (str/includes? (str suffix) ".") ".." ".")
-       suffix))
+  (str prefix "/" suffix))
 
 (defn -ref [schema {::keys [transform definitions definitions-path]
                     :or {definitions-path "#/definitions/"}
