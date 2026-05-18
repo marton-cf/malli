@@ -132,7 +132,8 @@
 (defmethod accept :map-of [_ schema children _]
   (minmax-properties
    {:type "object",
-    :additionalProperties (second children)}
+    :additionalProperties (second children)
+    :propertyNames (first children)}
    schema
    :minProperties
    :maxProperties))
