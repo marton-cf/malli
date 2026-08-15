@@ -459,7 +459,8 @@
 
 (defn strip-extra-keys-transformer
   ([] (strip-extra-keys-transformer nil))
-  ([{:keys [accept] :or {accept (m/-comp #(or (nil? %) (true? %)) :closed m/properties)}}]
+  ([{:keys [accept strict] :or {accept (m/-comp #(or (nil? %) (true? %)) :closed m/properties)
+                                strict (m/-comp #(or (nil? %) (true? %)) :strict m/properties)}}]
    (let [strip-map {:compile (fn [schema _]
                                (let [default-schema (m/default-schema schema)
                                      ks (some->> schema (m/explicit-keys) (set))]
@@ -474,10 +475,12 @@
                                     (let [entry-schema (m/into-schema :tuple nil (m/children schema) options)
                                           valid? (m/validator entry-schema options)]
                                       {stage (fn [x]
-                                               (reduce (fn [acc entry]
-                                                         (if (valid? entry)
-                                                           (apply assoc acc entry)
-                                                           acc)) (empty x) x))}))})]
+                                               (if strict
+                                                 x
+                                                 (reduce (fn [acc entry]
+                                                           (if (valid? entry)
+                                                             (apply assoc acc entry)
+                                                             acc)) (empty x) x)))}))})]
      (transformer
       {:decoders {:map strip-map, :map-of (strip-map-of :leave)}
        :encoders {:map strip-map, :map-of (strip-map-of :enter)}}))))
